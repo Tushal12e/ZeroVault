@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroVault | Secure Storage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>ZeroVault_</h1>
+            <p class="subtitle">Client-Side Encrypted Storage. The server sees nothing.</p>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section id="upload-section" class="panel">
+                <h2>[ ENCRYPT & UPLOAD ]</h2>
+                <div class="drop-zone" id="drop-zone">
+                    <p>Drag file here or click to select</p>
+                    <input type="file" id="file-input" hidden>
+                </div>
+
+                <div class="options-area">
+                    <div class="option-group">
+                        <label for="password-input">Password (Optional):</label>
+                        <input type="password" id="password-input" placeholder="Leave empty for none">
+                    </div>
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="burn-checkbox">
+                            <span class="checkmark"></span>
+                            🔥 Burn After Reading (Delete after 1 download)
+                        </label>
+                    </div>
+                </div>
+
+                <div id="upload-status" class="status-text"></div>
+
+                <div id="result-area" class="hidden">
+                    <p>File Encrypted & Uploaded!</p>
+                    <div class="link-box">
+                        <input type="text" id="share-link" readonly>
+                        <button id="copy-btn">COPY</button>
+                    </div>
+                    <p class="warning">⚠️ SAVE THIS LINK. It contains the decryption key. If you lose it, the file is
+                        gone forever.</p>
+                </div>
+            </section>
+
+            <!-- Download Section (Hidden by default, shown when URL has hash) -->
+            <section id="download-section" class="panel hidden">
+                <h2>[ DECRYPT & DOWNLOAD ]</h2>
+                <p>Secure file detected.</p>
+
+                <div id="password-prompt" class="hidden option-group">
+                    <label for="decrypt-password">Enter Password:</label>
+                    <input type="password" id="decrypt-password" placeholder="Required to unlock">
+                </div>
+
+                <button id="decrypt-btn" class="action-btn">UNLOCK FILE</button>
+                <div id="download-status" class="status-text"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>ZeroVault System v1.0 // <span id="connection-status">CONNECTED</span></p>
+        </footer>
+    </div>
+
+    <script src="crypto.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

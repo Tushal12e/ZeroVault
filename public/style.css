@@ -1,0 +1,177 @@
+:root {
+    --bg-color: #0a0a0a;
+    --panel-bg: #111;
+    --text-color: #0f0;
+    --accent-color: #0f0;
+    --border-color: #333;
+    --font-main: 'JetBrains Mono', monospace;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.subtitle {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.drop-zone {
+    border: 2px dashed var(--border-color);
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.drop-zone:hover {
+    border-color: var(--accent-color);
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.action-btn {
+    background: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-family: var(--font-main);
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+.action-btn:hover {
+    box-shadow: 0 0 15px var(--accent-color);
+}
+
+.hidden {
+    display: none;
+}
+
+.link-box {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+input[type="text"] {
+    background: #000;
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 10px;
+    flex-grow: 1;
+    font-family: var(--font-main);
+}
+
+button#copy-btn {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    font-family: var(--font-main);
+}
+
+.warning {
+    color: #ff3333;
+    font-size: 0.8rem;
+}
+
+.status-text {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.8rem;
+    color: #444;
+}
+
+/* Options Area */
+.options-area {
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.option-group {
+    margin-bottom: 15px;
+}
+
+.option-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+input[type="password"] {
+    background: #000;
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    /* Fix width issue */
+    font-family: var(--font-main);
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+    cursor: pointer;
+}
