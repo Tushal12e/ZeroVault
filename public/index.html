@@ -125,9 +125,11 @@
                             Password Protection (Optional)
                         </label>
                         <div class="input-wrapper">
-                            <input type="password" id="password-input" placeholder="Leave empty for no password">
+                            <input type="password" id="password-input" placeholder="Leave empty for no password"
+                                autocomplete="new-password">
                             <button type="button" class="toggle-password" id="toggle-password">👁️</button>
                         </div>
+
                     </div>
 
                     <div class="option-row">
@@ -293,7 +295,8 @@
                         Enter Password to Unlock:
                     </label>
                     <div class="input-wrapper">
-                        <input type="password" id="decrypt-password" placeholder="Enter password">
+                        <input type="password" id="decrypt-password" placeholder="Enter password"
+                            autocomplete="current-password">
                         <button type="button" class="toggle-password" id="toggle-decrypt-password">👁️</button>
                     </div>
                 </div>
@@ -316,7 +319,7 @@
 
         <footer>
             <div class="footer-content">
-                <p class="footer-brand">ZeroVault v3.0</p>
+                <p class="footer-brand">ZeroVault v4.2</p>
                 <p class="footer-tagline">Zero-Knowledge • End-to-End Encrypted • Maximum Privacy</p>
             </div>
             <div class="footer-status">
