@@ -4,19 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ZeroVault - Secure encrypted file sharing with burn-after-reading capability">
+    <meta name="description" content="ZeroVault - Secure encrypted file sharing with advanced privacy features">
     <meta name="theme-color" content="#0a0a0a">
-    <title>ZeroVault | Secure Encrypted File Sharing</title>
+    <title>ZeroVault | Zero-Knowledge Secure File Sharing</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
     <!-- QR Code Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
+    <!-- Audio Elements for Sound Effects -->
+    <audio id="sound-encrypt" preload="auto">
+        <source
+            src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2Onp6XjHxvYl5lcoGOmZqUiHltYF1kcH6KlZmVi4B0ZmFgZ3N/i5aZl42CdmljYGZxfYmUmJaLgHVpY2FmbXqGkZaVjIF1aWRjZm95hI+UlIx/dGhkY2dueYOOk5OLfnNoZGRnbnmDjZKSin1yZ2RlZ256g42RkYl8cmZkZWZteIKMkJCIfHFmZGVnbXiCi4+PiHtwZWRlZ214gYuOjod6cGVkZWdteIGKjY2GeW9lZGZnbXeBio2MhnhvZWRmZ214gYqMjIZ4b2VkZmdteIGJjIuFd25lZGZobniAiYuLhXduZWVmaG54gImLi4V3bmVlZmhueICJiouFd25lZWZobniAiIqKhHZtZWVmaW54gIiKioR2bWVlZmluef+IioqEdW1lZWZpbnj/h4mJg3VtZWVnaW54/4eJiYN1bWVlZ2lueP+HiYmDdW1lZWdpbnn/h4mJg3RsZWVnaW55/4aIiIJ0bGVlZ2lueP+GiIiCdGxlZmdpb3j/hoiIgnRsZWZnaW94/4WIiIJ0bGVmZ2lveP+FiIiBc2xlZmdpb3j/hYeHgXNsZWZnaW94/4WHh4FzbGVmZ2lveP+Fh4eBc2xlZmdpb3j/hYeHgXNsZWZnaW94/4WHh4FzbGVmZ2lveP+Fh4eBcmtlZmdpb3j/hIaGgHJrZWZnaW94/4SGhoByamVmZ2pveP+EhoaAcmplZmdqb3j/hIaGgHJqZWZnam94/4SGhn9yamVmZ2pveP+DhYV/cWplZmdqb3j/g4WFf3FqZWZnam94/4OFhX9xamVmZ2pveP+DhYV/cWplZmdr"
+            type="audio/wav">
+    </audio>
+    <audio id="sound-success" preload="auto">
+        <source
+            src="data:audio/wav;base64,UklGRl9AAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YTs/AAD/fwAAAAAAAAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAAAIAAAP9/AAD/fwAAAAAAAAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAAAIAAAP9/AAD/fwAAAAAAAAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAAAIAAAP9/"
+            type="audio/wav">
+    </audio>
+    <audio id="sound-click" preload="auto">
+        <source
+            src="data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YRAAAAD/f/9//3//f/9//38AAA=="
+            type="audio/wav">
+    </audio>
+
     <div class="background-effects">
         <div class="gradient-orb orb-1"></div>
         <div class="gradient-orb orb-2"></div>
+        <!-- Matrix rain canvas for terminal theme -->
+        <canvas id="matrix-canvas" class="matrix-canvas hidden"></canvas>
     </div>
 
     <div class="container">
@@ -30,11 +53,25 @@
                 </div>
                 <h1>ZeroVault<span class="cursor">_</span></h1>
             </div>
-            <p class="subtitle">Client-Side Encrypted Storage. <span class="highlight">The server sees nothing.</span></p>
-            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-                <span class="theme-icon sun">☀️</span>
-                <span class="theme-icon moon">🌙</span>
-            </button>
+            <p class="subtitle">Zero-Knowledge Encryption. <span class="highlight">Maximum Privacy.</span></p>
+
+            <div class="header-controls">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="control-btn" aria-label="Toggle theme" title="Switch Theme">
+                    <span class="theme-icon sun">☀️</span>
+                    <span class="theme-icon moon">🌙</span>
+                </button>
+                <!-- Terminal Theme Toggle -->
+                <button id="terminal-toggle" class="control-btn" aria-label="Toggle terminal mode"
+                    title="Terminal Mode">
+                    <span class="terminal-icon">💻</span>
+                </button>
+                <!-- Sound Toggle -->
+                <button id="sound-toggle" class="control-btn" aria-label="Toggle sounds" title="Sound Effects">
+                    <span class="sound-icon on">🔊</span>
+                    <span class="sound-icon off hidden">🔇</span>
+                </button>
+            </div>
         </header>
 
         <main>
@@ -44,7 +81,7 @@
                     <h2><span class="bracket">[</span> ENCRYPT & UPLOAD <span class="bracket">]</span></h2>
                     <div class="status-badge" id="connection-badge">
                         <span class="pulse"></span>
-                        SECURE
+                        ZERO-KNOWLEDGE
                     </div>
                 </div>
 
@@ -57,20 +94,20 @@
                                 <line x1="12" y1="3" x2="12" y2="15"></line>
                             </svg>
                         </div>
-                        <p class="drop-text">Drag file here or click to select</p>
-                        <p class="drop-hint">Maximum file size: 100MB</p>
+                        <p class="drop-text">Drag file here, click to select, or <kbd>Ctrl+V</kbd> to paste</p>
+                        <p class="drop-hint">Maximum file size: 100MB • All metadata encrypted</p>
                     </div>
                     <input type="file" id="file-input" hidden>
                 </div>
 
-                <!-- File Info (shown after file selected) -->
+                <!-- File Info -->
                 <div id="file-info" class="file-info hidden">
                     <div class="file-icon" id="file-type-icon">📄</div>
                     <div class="file-details">
                         <span class="file-name" id="selected-file-name">filename.txt</span>
                         <span class="file-size" id="selected-file-size">0 KB</span>
                     </div>
-                    <button class="remove-file-btn" id="remove-file">✕</button>
+                    <button class="remove-file-btn" id="remove-file" title="Remove file">✕</button>
                 </div>
 
                 <!-- Progress Bar -->
@@ -118,12 +155,60 @@
                             </label>
                         </div>
                     </div>
+
+                    <!-- Advanced Privacy Options -->
+                    <div class="advanced-toggle" id="advanced-toggle">
+                        <span class="toggle-icon">⚙️</span>
+                        <span>Advanced Privacy Options</span>
+                        <span class="arrow">▼</span>
+                    </div>
+
+                    <div id="advanced-options" class="advanced-options hidden">
+                        <div class="option-row">
+                            <div class="option-group half">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="decoy-checkbox">
+                                    <span class="checkmark"></span>
+                                    <span class="checkbox-label">
+                                        <span class="option-icon">🎭</span>
+                                        Decoy Files
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="option-group half">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="disposable-checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    <span class="checkbox-label">
+                                        <span class="option-icon">🔗</span>
+                                        Disposable Links
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="zkp-checkbox" checked>
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">
+                                    <span class="option-icon">🛡️</span>
+                                    Zero-Knowledge Proof (Hash verification)
+                                </span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <button id="upload-btn" class="action-btn" disabled>
                     <span class="btn-icon">🚀</span>
                     <span class="btn-text">SELECT FILE TO UPLOAD</span>
                 </button>
+
+                <div class="keyboard-hint">
+                    <kbd>Ctrl+V</kbd> Paste &nbsp;|&nbsp; <kbd>Ctrl+Enter</kbd> Upload
+                </div>
 
                 <div id="upload-status" class="status-text"></div>
 
@@ -153,15 +238,31 @@
                             </div>
                         </div>
 
+                        <div class="privacy-badges">
+                            <span class="privacy-badge" id="badge-zkp" title="Zero-Knowledge Proof enabled">🛡️
+                                ZKP</span>
+                            <span class="privacy-badge" id="badge-decoy" title="Decoy files generated">🎭 Decoy</span>
+                            <span class="privacy-badge" id="badge-disposable" title="Disposable link">🔗
+                                Disposable</span>
+                            <span class="privacy-badge" id="badge-encrypted" title="End-to-end encrypted">🔒 E2E</span>
+                        </div>
+
                         <div class="expiry-info" id="expiry-info">
                             <span class="expiry-icon">⏳</span>
                             <span id="expiry-text">Expires in 24 hours</span>
                         </div>
+
+                        <!-- Self-Healing Link Button -->
+                        <button id="heal-link-btn" class="secondary-btn hidden">
+                            <span class="btn-icon">🔄</span>
+                            Regenerate Link (Invalidate Old)
+                        </button>
                     </div>
 
                     <p class="warning">
                         <span class="warning-icon">⚠️</span>
-                        <strong>SAVE THIS LINK.</strong> It contains the decryption key. If you lose it, the file is gone forever.
+                        <strong>SAVE THIS LINK.</strong> It contains the decryption key. Server has zero knowledge of
+                        your file contents.
                     </p>
 
                     <button id="upload-another" class="secondary-btn">
@@ -171,7 +272,7 @@
                 </div>
             </section>
 
-            <!-- Download Section (Hidden by default) -->
+            <!-- Download Section -->
             <section id="download-section" class="panel glass hidden">
                 <div class="panel-header">
                     <h2><span class="bracket">[</span> DECRYPT & DOWNLOAD <span class="bracket">]</span></h2>
@@ -218,8 +319,8 @@
 
         <footer>
             <div class="footer-content">
-                <p class="footer-brand">ZeroVault v2.0</p>
-                <p class="footer-tagline">Zero-Knowledge • End-to-End Encrypted • Open Source</p>
+                <p class="footer-brand">ZeroVault v3.0</p>
+                <p class="footer-tagline">Zero-Knowledge • End-to-End Encrypted • Maximum Privacy</p>
             </div>
             <div class="footer-status">
                 <span class="status-dot"></span>
