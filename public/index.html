@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ZeroVault - Secure encrypted file sharing with burn-after-reading capability">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>ZeroVault | Secure Encrypted File Sharing</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+
+<body>
+    <div class="background-effects">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <h1>ZeroVault<span class="cursor">_</span></h1>
+            </div>
+            <p class="subtitle">Client-Side Encrypted Storage. <span class="highlight">The server sees nothing.</span></p>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <span class="theme-icon sun">☀️</span>
+                <span class="theme-icon moon">🌙</span>
+            </button>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section id="upload-section" class="panel glass">
+                <div class="panel-header">
+                    <h2><span class="bracket">[</span> ENCRYPT & UPLOAD <span class="bracket">]</span></h2>
+                    <div class="status-badge" id="connection-badge">
+                        <span class="pulse"></span>
+                        SECURE
+                    </div>
+                </div>
+
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <p class="drop-text">Drag file here or click to select</p>
+                        <p class="drop-hint">Maximum file size: 100MB</p>
+                    </div>
+                    <input type="file" id="file-input" hidden>
+                </div>
+
+                <!-- File Info (shown after file selected) -->
+                <div id="file-info" class="file-info hidden">
+                    <div class="file-icon" id="file-type-icon">📄</div>
+                    <div class="file-details">
+                        <span class="file-name" id="selected-file-name">filename.txt</span>
+                        <span class="file-size" id="selected-file-size">0 KB</span>
+                    </div>
+                    <button class="remove-file-btn" id="remove-file">✕</button>
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="progress-container" class="progress-container hidden">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">0%</span>
+                </div>
+
+                <div class="options-area">
+                    <div class="option-group">
+                        <label for="password-input">
+                            <span class="option-icon">🔐</span>
+                            Password Protection (Optional)
+                        </label>
+                        <div class="input-wrapper">
+                            <input type="password" id="password-input" placeholder="Leave empty for no password">
+                            <button type="button" class="toggle-password" id="toggle-password">👁️</button>
+                        </div>
+                    </div>
+
+                    <div class="option-row">
+                        <div class="option-group half">
+                            <label for="expiry-select">
+                                <span class="option-icon">⏰</span>
+                                Expiry Time
+                            </label>
+                            <select id="expiry-select" class="styled-select">
+                                <option value="1h">1 Hour</option>
+                                <option value="6h">6 Hours</option>
+                                <option value="24h" selected>24 Hours</option>
+                                <option value="7d">7 Days</option>
+                            </select>
+                        </div>
+
+                        <div class="option-group half">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="burn-checkbox">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">
+                                    <span class="option-icon">🔥</span>
+                                    Burn After Reading
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="upload-btn" class="action-btn" disabled>
+                    <span class="btn-icon">🚀</span>
+                    <span class="btn-text">SELECT FILE TO UPLOAD</span>
+                </button>
+
+                <div id="upload-status" class="status-text"></div>
+
+                <!-- Result Area -->
+                <div id="result-area" class="result-area hidden">
+                    <div class="success-header">
+                        <div class="success-icon">✅</div>
+                        <h3>File Encrypted & Uploaded!</h3>
+                    </div>
+
+                    <div class="result-content">
+                        <div class="link-section">
+                            <label>Share Link:</label>
+                            <div class="link-box">
+                                <input type="text" id="share-link" readonly>
+                                <button id="copy-btn" class="copy-btn">
+                                    <span class="copy-icon">📋</span>
+                                    <span class="copy-text">COPY</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qr-section">
+                            <label>Scan QR Code:</label>
+                            <div class="qr-container">
+                                <canvas id="qr-code"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="expiry-info" id="expiry-info">
+                            <span class="expiry-icon">⏳</span>
+                            <span id="expiry-text">Expires in 24 hours</span>
+                        </div>
+                    </div>
+
+                    <p class="warning">
+                        <span class="warning-icon">⚠️</span>
+                        <strong>SAVE THIS LINK.</strong> It contains the decryption key. If you lose it, the file is gone forever.
+                    </p>
+
+                    <button id="upload-another" class="secondary-btn">
+                        <span class="btn-icon">➕</span>
+                        Upload Another File
+                    </button>
+                </div>
+            </section>
+
+            <!-- Download Section (Hidden by default) -->
+            <section id="download-section" class="panel glass hidden">
+                <div class="panel-header">
+                    <h2><span class="bracket">[</span> DECRYPT & DOWNLOAD <span class="bracket">]</span></h2>
+                    <div class="status-badge secure">
+                        <span class="pulse"></span>
+                        ENCRYPTED
+                    </div>
+                </div>
+
+                <div class="file-preview">
+                    <div class="file-preview-icon" id="preview-icon">📁</div>
+                    <div class="file-preview-info">
+                        <span class="file-preview-name" id="preview-filename">Secure File</span>
+                        <span class="file-preview-meta" id="preview-meta">Ready to decrypt</span>
+                    </div>
+                </div>
+
+                <div id="password-prompt" class="hidden option-group">
+                    <label for="decrypt-password">
+                        <span class="option-icon">🔐</span>
+                        Enter Password to Unlock:
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="password" id="decrypt-password" placeholder="Enter password">
+                        <button type="button" class="toggle-password" id="toggle-decrypt-password">👁️</button>
+                    </div>
+                </div>
+
+                <button id="decrypt-btn" class="action-btn">
+                    <span class="btn-icon">🔓</span>
+                    <span class="btn-text">UNLOCK & DOWNLOAD</span>
+                </button>
+
+                <div id="download-status" class="status-text"></div>
+
+                <div id="download-progress" class="progress-container hidden">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="download-progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="download-progress-text">Decrypting...</span>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p class="footer-brand">ZeroVault v2.0</p>
+                <p class="footer-tagline">Zero-Knowledge • End-to-End Encrypted • Open Source</p>
+            </div>
+            <div class="footer-status">
+                <span class="status-dot"></span>
+                <span id="connection-status">System Online</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="crypto.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
