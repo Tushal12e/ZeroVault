@@ -124,13 +124,13 @@
                             <span class="option-icon">🔐</span>
                             Password Protection (Optional)
                         </label>
-                        <div class="input-wrapper">
+                        <form onsubmit="return false;" class="input-wrapper">
                             <input type="password" id="password-input" placeholder="Leave empty for no password"
                                 autocomplete="new-password">
                             <button type="button" class="toggle-password" id="toggle-password">👁️</button>
-                        </div>
-
+                        </form>
                     </div>
+
 
                     <div class="option-row">
                         <div class="option-group half">
@@ -294,12 +294,13 @@
                         <span class="option-icon">🔐</span>
                         Enter Password to Unlock:
                     </label>
-                    <div class="input-wrapper">
+                    <form onsubmit="return false;" class="input-wrapper">
                         <input type="password" id="decrypt-password" placeholder="Enter password"
                             autocomplete="current-password">
                         <button type="button" class="toggle-password" id="toggle-decrypt-password">👁️</button>
-                    </div>
+                    </form>
                 </div>
+
 
                 <button id="decrypt-btn" class="action-btn">
                     <span class="btn-icon">🔓</span>
