@@ -302,11 +302,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // ============ Advanced Options Toggle ============
-    advancedToggle?.addEventListener('click', () => {
-        playSound('click');
-        advancedToggle.classList.toggle('open');
-        advancedOptions.classList.toggle('hidden');
-    });
+    if (advancedToggle && advancedOptions) {
+        advancedToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            playSound('click');
+            advancedToggle.classList.toggle('open');
+            advancedOptions.classList.toggle('hidden');
+        });
+    }
+
 
     // ============ File Helpers ============
     function getFileIcon(filename) {
