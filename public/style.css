@@ -1321,33 +1321,62 @@ footer {
 }
 
 .social-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
 }
 
-.social-btn.whatsapp:hover {
-    background: #25D366;
+.social-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.social-btn.whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
     border-color: #25D366;
     color: white;
 }
 
-.social-btn.telegram:hover {
-    background: #0088cc;
+.social-btn.whatsapp:hover {
+    background: linear-gradient(135deg, #2EE370 0%, #1AA374 100%);
+    border-color: #2EE370;
+    box-shadow: 0 12px 35px rgba(37, 211, 102, 0.3);
+}
+
+.social-btn.telegram {
+    background: linear-gradient(135deg, #0088cc 0%, #005f8f 100%);
     border-color: #0088cc;
     color: white;
 }
 
-.social-btn.twitter:hover {
-    background: #1DA1F2;
+.social-btn.telegram:hover {
+    background: linear-gradient(135deg, #00a7f5 0%, #0077b5 100%);
+    border-color: #00a7f5;
+    box-shadow: 0 12px 35px rgba(0, 136, 204, 0.3);
+}
+
+.social-btn.twitter {
+    background: linear-gradient(135deg, #1DA1F2 0%, #0a74da 100%);
     border-color: #1DA1F2;
     color: white;
 }
 
-.social-btn.email:hover {
-    background: var(--accent-purple);
-    border-color: var(--accent-purple);
+.social-btn.twitter:hover {
+    background: linear-gradient(135deg, #4db5f5 0%, #1b8fe0 100%);
+    border-color: #4db5f5;
+    box-shadow: 0 12px 35px rgba(29, 161, 242, 0.3);
+}
+
+.social-btn.email {
+    background: var(--accent-gradient);
+    border: none;
     color: white;
 }
+
+.social-btn.email:hover {
+    opacity: 0.9;
+    box-shadow: 0 12px 35px rgba(168, 85, 247, 0.3);
+}
+
 
 /* ============ Short Link Section ============ */
 .short-link-section {
