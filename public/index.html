@@ -230,6 +230,41 @@
                             </div>
                         </div>
 
+                        <!-- Short Link Section -->
+                        <div class="short-link-section">
+                            <label>Short Link:</label>
+                            <div class="link-box">
+                                <input type="text" id="short-link" readonly placeholder="Click to generate...">
+                                <button id="generate-short-btn" class="copy-btn">
+                                    <span>✂️</span>
+                                    <span class="short-text">SHORT</span>
+                                </button>
+                                <button id="copy-short-btn" class="copy-btn hidden">
+                                    <span>📋</span>
+                                    <span>COPY</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Social Share Buttons -->
+                        <div class="social-share-section">
+                            <label>Share via:</label>
+                            <div class="social-buttons">
+                                <button id="share-whatsapp" class="social-btn whatsapp" title="Share on WhatsApp">
+                                    <span>💬</span> WhatsApp
+                                </button>
+                                <button id="share-telegram" class="social-btn telegram" title="Share on Telegram">
+                                    <span>✈️</span> Telegram
+                                </button>
+                                <button id="share-twitter" class="social-btn twitter" title="Share on Twitter/X">
+                                    <span>🐦</span> Twitter
+                                </button>
+                                <button id="share-email" class="social-btn email" title="Share via Email">
+                                    <span>📧</span> Email
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="qr-section">
                             <label>Scan QR Code:</label>
                             <div class="qr-container">
@@ -246,9 +281,28 @@
                             <span class="privacy-badge" id="badge-encrypted" title="End-to-end encrypted">🔒 E2E</span>
                         </div>
 
-                        <div class="expiry-info" id="expiry-info">
-                            <span class="expiry-icon">⏳</span>
-                            <span id="expiry-text">Expires in 24 hours</span>
+                        <!-- Expiry Countdown Timer -->
+                        <div class="expiry-countdown" id="expiry-countdown">
+                            <div class="countdown-header">
+                                <span class="expiry-icon">⏳</span>
+                                <span id="expiry-text">Expires in 24 hours</span>
+                            </div>
+                            <div class="countdown-timer" id="countdown-timer">
+                                <div class="countdown-item">
+                                    <span class="countdown-value" id="countdown-hours">00</span>
+                                    <span class="countdown-label">Hours</span>
+                                </div>
+                                <div class="countdown-separator">:</div>
+                                <div class="countdown-item">
+                                    <span class="countdown-value" id="countdown-minutes">00</span>
+                                    <span class="countdown-label">Min</span>
+                                </div>
+                                <div class="countdown-separator">:</div>
+                                <div class="countdown-item">
+                                    <span class="countdown-value" id="countdown-seconds">00</span>
+                                    <span class="countdown-label">Sec</span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Self-Healing Link Button -->
@@ -257,6 +311,7 @@
                             Regenerate Link (Invalidate Old)
                         </button>
                     </div>
+
 
                     <p class="warning">
                         <span class="warning-icon">⚠️</span>

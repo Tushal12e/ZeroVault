@@ -134,7 +134,23 @@ const EXPIRY_TIMES = {
     '7d': 7 * 24 * 60 * 60 * 1000
 };
 
+// ============ SHORT LINK REDIRECT ============
+app.get('/s/:shortCode', (req, res) => {
+    const shortCode = req.params.shortCode;
+
+    // Find file that starts with this short code
+    const matchingFile = Object.keys(fileMetadata).find(fileId => fileId.startsWith(shortCode));
+
+    if (matchingFile && fileMetadata[matchingFile]) {
+        // Redirect to main page with hash (client will need to reconstruct full link)
+        res.redirect(`/#short=${shortCode}`);
+    } else {
+        res.status(404).json({ error: 'Short link not found or expired' });
+    }
+});
+
 // ============ UPLOAD ROUTE ============
+
 app.post('/upload', uploadLimiter, upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded.' });

@@ -505,8 +505,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 playSound('success');
                 triggerConfetti();
 
+                // Start countdown timer
+                if (window.startCountdown) {
+                    window.startCountdown(expiry);
+                }
+
                 // Show self-healing button if applicable
                 document.getElementById('heal-link-btn')?.classList.remove('hidden');
+
             } else {
                 throw new Error(result.error || 'Upload failed');
             }
@@ -794,4 +800,135 @@ document.addEventListener('DOMContentLoaded', async () => {
             playSound('error');
         }
     }
+
+    // ============ Social Share Buttons ============
+    const shareWhatsapp = document.getElementById('share-whatsapp');
+    const shareTelegram = document.getElementById('share-telegram');
+    const shareTwitter = document.getElementById('share-twitter');
+    const shareEmail = document.getElementById('share-email');
+
+    shareWhatsapp?.addEventListener('click', () => {
+        const link = shareLinkInput?.value || '';
+        const text = encodeURIComponent(`🔒 Secure encrypted file: ${link}`);
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+        playSound('click');
+    });
+
+    shareTelegram?.addEventListener('click', () => {
+        const link = shareLinkInput?.value || '';
+        const text = encodeURIComponent('🔒 Secure encrypted file');
+        window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${text}`, '_blank');
+        playSound('click');
+    });
+
+    shareTwitter?.addEventListener('click', () => {
+        const link = shareLinkInput?.value || '';
+        const text = encodeURIComponent(`🔒 Sharing a secure encrypted file via ZeroVault! ${link}`);
+        window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+        playSound('click');
+    });
+
+    shareEmail?.addEventListener('click', () => {
+        const link = shareLinkInput?.value || '';
+        const subject = encodeURIComponent('Secure Encrypted File - ZeroVault');
+        const body = encodeURIComponent(`Hi,\n\nI've shared a secure encrypted file with you.\n\nDownload Link: ${link}\n\n🔒 This file is end-to-end encrypted. Only you can decrypt it.\n\nBest regards`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        playSound('click');
+    });
+
+    // ============ Short Link ============
+    const shortLinkInput = document.getElementById('short-link');
+    const generateShortBtn = document.getElementById('generate-short-btn');
+    const copyShortBtn = document.getElementById('copy-short-btn');
+
+    generateShortBtn?.addEventListener('click', async () => {
+        const fullLink = shareLinkInput?.value || '';
+        if (!fullLink) return;
+
+        playSound('click');
+        generateShortBtn.disabled = true;
+        generateShortBtn.innerHTML = '<span>⏳</span><span>...</span>';
+
+        // Generate short code from fileId
+        const hash = window.location.hash.substring(1);
+        const parts = hash.split(':');
+        const fileId = parts[0] || '';
+        const shortCode = fileId.substring(0, 8);
+
+        // Create short link format
+        const shortLink = `${window.location.origin}/s/${shortCode}`;
+
+        shortLinkInput.value = shortLink;
+        generateShortBtn.classList.add('hidden');
+        copyShortBtn.classList.remove('hidden');
+
+        playSound('success');
+    });
+
+    copyShortBtn?.addEventListener('click', () => {
+        const shortLink = shortLinkInput?.value || '';
+        if (shortLink) {
+            navigator.clipboard.writeText(shortLink);
+            copyShortBtn.innerHTML = '<span>✅</span><span>COPIED</span>';
+            playSound('success');
+            setTimeout(() => {
+                copyShortBtn.innerHTML = '<span>📋</span><span>COPY</span>';
+            }, 2000);
+        }
+    });
+
+    // ============ Countdown Timer ============
+    let countdownInterval = null;
+    let expiryTimestamp = null;
+
+    function startCountdown(expiryValue) {
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        const hoursElement = document.getElementById('countdown-hours');
+        const minutesElement = document.getElementById('countdown-minutes');
+        const secondsElement = document.getElementById('countdown-seconds');
+        const expiryTextElement = document.getElementById('expiry-text');
+
+        if (!hoursElement || !minutesElement || !secondsElement) return;
+
+        // Calculate expiry time based on selection
+        let milliseconds;
+        switch (expiryValue) {
+            case '1h': milliseconds = 1 * 60 * 60 * 1000; break;
+            case '6h': milliseconds = 6 * 60 * 60 * 1000; break;
+            case '24h': milliseconds = 24 * 60 * 60 * 1000; break;
+            case '7d': milliseconds = 7 * 24 * 60 * 60 * 1000; break;
+            default: milliseconds = 24 * 60 * 60 * 1000;
+        }
+
+        expiryTimestamp = Date.now() + milliseconds;
+
+        function updateCountdown() {
+            const now = Date.now();
+            const remaining = expiryTimestamp - now;
+
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                hoursElement.textContent = '00';
+                minutesElement.textContent = '00';
+                secondsElement.textContent = '00';
+                if (expiryTextElement) expiryTextElement.textContent = 'Expired!';
+                return;
+            }
+
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+            hoursElement.textContent = hours.toString().padStart(2, '0');
+            minutesElement.textContent = minutes.toString().padStart(2, '0');
+            secondsElement.textContent = seconds.toString().padStart(2, '0');
+        }
+
+        updateCountdown();
+        countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    // Expose startCountdown globally for use after upload
+    window.startCountdown = startCountdown;
 });
