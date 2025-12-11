@@ -807,75 +807,148 @@ document.addEventListener('DOMContentLoaded', async () => {
     const shareTwitter = document.getElementById('share-twitter');
     const shareEmail = document.getElementById('share-email');
 
-    shareWhatsapp?.addEventListener('click', () => {
-        const link = shareLinkInput?.value || '';
-        const text = encodeURIComponent(`🔒 Secure encrypted file: ${link}`);
-        window.open(`https://wa.me/?text=${text}`, '_blank');
-        playSound('click');
-    });
+    if (shareWhatsapp) {
+        shareWhatsapp.addEventListener('click', (e) => {
+            e.preventDefault();
+            const linkElement = document.getElementById('share-link');
+            const link = linkElement ? linkElement.value : '';
+            console.log('WhatsApp share clicked, link:', link);
+            if (!link) {
+                alert('Please upload a file first to get a share link.');
+                return;
+            }
+            const text = encodeURIComponent(`🔒 Secure encrypted file: ${link}`);
+            const url = `https://wa.me/?text=${text}`;
+            window.open(url, '_blank');
+            playSound('click');
+        });
+    }
 
-    shareTelegram?.addEventListener('click', () => {
-        const link = shareLinkInput?.value || '';
-        const text = encodeURIComponent('🔒 Secure encrypted file');
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${text}`, '_blank');
-        playSound('click');
-    });
+    if (shareTelegram) {
+        shareTelegram.addEventListener('click', (e) => {
+            e.preventDefault();
+            const linkElement = document.getElementById('share-link');
+            const link = linkElement ? linkElement.value : '';
+            console.log('Telegram share clicked, link:', link);
+            if (!link) {
+                alert('Please upload a file first to get a share link.');
+                return;
+            }
+            const text = encodeURIComponent('🔒 Secure encrypted file');
+            const url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${text}`;
+            window.open(url, '_blank');
+            playSound('click');
+        });
+    }
 
-    shareTwitter?.addEventListener('click', () => {
-        const link = shareLinkInput?.value || '';
-        const text = encodeURIComponent(`🔒 Sharing a secure encrypted file via ZeroVault! ${link}`);
-        window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
-        playSound('click');
-    });
+    if (shareTwitter) {
+        shareTwitter.addEventListener('click', (e) => {
+            e.preventDefault();
+            const linkElement = document.getElementById('share-link');
+            const link = linkElement ? linkElement.value : '';
+            console.log('Twitter share clicked, link:', link);
+            if (!link) {
+                alert('Please upload a file first to get a share link.');
+                return;
+            }
+            const text = encodeURIComponent(`🔒 Sharing a secure encrypted file via ZeroVault! ${link}`);
+            const url = `https://twitter.com/intent/tweet?text=${text}`;
+            window.open(url, '_blank');
+            playSound('click');
+        });
+    }
 
-    shareEmail?.addEventListener('click', () => {
-        const link = shareLinkInput?.value || '';
-        const subject = encodeURIComponent('Secure Encrypted File - ZeroVault');
-        const body = encodeURIComponent(`Hi,\n\nI've shared a secure encrypted file with you.\n\nDownload Link: ${link}\n\n🔒 This file is end-to-end encrypted. Only you can decrypt it.\n\nBest regards`);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-        playSound('click');
-    });
+    if (shareEmail) {
+        shareEmail.addEventListener('click', (e) => {
+            e.preventDefault();
+            const linkElement = document.getElementById('share-link');
+            const link = linkElement ? linkElement.value : '';
+            console.log('Email share clicked, link:', link);
+            if (!link) {
+                alert('Please upload a file first to get a share link.');
+                return;
+            }
+            const subject = encodeURIComponent('Secure Encrypted File - ZeroVault');
+            const body = encodeURIComponent(`Hi,\n\nI've shared a secure encrypted file with you.\n\nDownload Link: ${link}\n\n🔒 This file is end-to-end encrypted. Only you can decrypt it.\n\nBest regards`);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            playSound('click');
+        });
+    }
+
 
     // ============ Short Link ============
     const shortLinkInput = document.getElementById('short-link');
     const generateShortBtn = document.getElementById('generate-short-btn');
     const copyShortBtn = document.getElementById('copy-short-btn');
 
-    generateShortBtn?.addEventListener('click', async () => {
-        const fullLink = shareLinkInput?.value || '';
-        if (!fullLink) return;
+    if (generateShortBtn) {
+        generateShortBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const linkElement = document.getElementById('share-link');
+            const fullLink = linkElement ? linkElement.value : '';
+            console.log('Short link clicked, full link:', fullLink);
 
-        playSound('click');
-        generateShortBtn.disabled = true;
-        generateShortBtn.innerHTML = '<span>⏳</span><span>...</span>';
+            if (!fullLink) {
+                alert('Please upload a file first to get a share link.');
+                return;
+            }
 
-        // Generate short code from fileId
-        const hash = window.location.hash.substring(1);
-        const parts = hash.split(':');
-        const fileId = parts[0] || '';
-        const shortCode = fileId.substring(0, 8);
+            playSound('click');
+            generateShortBtn.disabled = true;
+            generateShortBtn.innerHTML = '<span>⏳</span><span>...</span>';
 
-        // Create short link format
-        const shortLink = `${window.location.origin}/s/${shortCode}`;
+            // Extract fileId from the share link (format: domain/#fileId:key:filename)
+            const hashIndex = fullLink.indexOf('#');
+            if (hashIndex === -1) {
+                alert('Invalid share link format.');
+                generateShortBtn.disabled = false;
+                generateShortBtn.innerHTML = '<span>✂️</span><span class="short-text">SHORT</span>';
+                return;
+            }
 
-        shortLinkInput.value = shortLink;
-        generateShortBtn.classList.add('hidden');
-        copyShortBtn.classList.remove('hidden');
+            const hashPart = fullLink.substring(hashIndex + 1);
+            const parts = hashPart.split(':');
+            const fileId = parts[0] || '';
+            const shortCode = fileId.substring(0, 8);
 
-        playSound('success');
-    });
+            if (!shortCode) {
+                alert('Could not generate short link.');
+                generateShortBtn.disabled = false;
+                generateShortBtn.innerHTML = '<span>✂️</span><span class="short-text">SHORT</span>';
+                return;
+            }
 
-    copyShortBtn?.addEventListener('click', () => {
-        const shortLink = shortLinkInput?.value || '';
-        if (shortLink) {
-            navigator.clipboard.writeText(shortLink);
-            copyShortBtn.innerHTML = '<span>✅</span><span>COPIED</span>';
+            // Create short link format
+            const origin = window.location.origin;
+            const shortLink = `${origin}/s/${shortCode}`;
+
+            if (shortLinkInput) {
+                shortLinkInput.value = shortLink;
+            }
+            generateShortBtn.classList.add('hidden');
+            if (copyShortBtn) {
+                copyShortBtn.classList.remove('hidden');
+            }
+
             playSound('success');
-            setTimeout(() => {
-                copyShortBtn.innerHTML = '<span>📋</span><span>COPY</span>';
-            }, 2000);
-        }
-    });
+        });
+    }
+
+    if (copyShortBtn) {
+        copyShortBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const shortLink = shortLinkInput ? shortLinkInput.value : '';
+            if (shortLink) {
+                navigator.clipboard.writeText(shortLink);
+                copyShortBtn.innerHTML = '<span>✅</span><span>COPIED</span>';
+                playSound('success');
+                setTimeout(() => {
+                    copyShortBtn.innerHTML = '<span>📋</span><span>COPY</span>';
+                }, 2000);
+            }
+        });
+    }
+
 
     // ============ Countdown Timer ============
     let countdownInterval = null;
