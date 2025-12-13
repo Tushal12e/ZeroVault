@@ -1517,3 +1517,33 @@ footer {
         font-size: 1.25rem;
     }
 }
+
+/* ============ QR Code Section ============ */
+.qr-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.qr-section label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.qr-container {
+    display: inline-block;
+    background: white;
+    padding: 16px;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.qr-container canvas {
+    display: block;
+    width: 150px !important;
+    height: 150px !important;
+}

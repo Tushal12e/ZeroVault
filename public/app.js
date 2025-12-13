@@ -568,16 +568,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function generateQRCode(text) {
         const canvas = document.getElementById('qr-code');
+        console.log('Generating QR code for:', text);
+        console.log('Canvas element:', canvas);
+        console.log('QRCode library:', typeof QRCode);
+
         if (canvas && typeof QRCode !== 'undefined') {
             QRCode.toCanvas(canvas, text, {
                 width: 150,
                 margin: 2,
                 color: { dark: '#000000', light: '#ffffff' }
             }, (error) => {
-                if (error) console.error('QR Code error:', error);
+                if (error) {
+                    console.error('QR Code error:', error);
+                } else {
+                    console.log('QR Code generated successfully');
+                }
             });
+        } else {
+            console.error('QR Code generation failed: canvas or library not available');
         }
     }
+
 
     function updatePrivacyBadges(zkp, decoy, disposable) {
         document.getElementById('badge-zkp')?.classList.toggle('hidden', !zkp);
