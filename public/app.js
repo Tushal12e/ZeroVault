@@ -567,25 +567,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function generateQRCode(text) {
-        const canvas = document.getElementById('qr-code');
+        const container = document.querySelector('.qr-container');
         console.log('Generating QR code for:', text);
-        console.log('Canvas element:', canvas);
+        console.log('Container element:', container);
         console.log('QRCode library:', typeof QRCode);
 
-        if (canvas && typeof QRCode !== 'undefined') {
-            QRCode.toCanvas(canvas, text, {
+        if (container && typeof QRCode !== 'undefined') {
+            // Clear previous content
+            container.innerHTML = '';
+
+            // Try toDataURL method first (creates an image)
+            QRCode.toDataURL(text, {
                 width: 150,
                 margin: 2,
                 color: { dark: '#000000', light: '#ffffff' }
-            }, (error) => {
-                if (error) {
-                    console.error('QR Code error:', error);
-                } else {
-                    console.log('QR Code generated successfully');
-                }
+            }).then(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'QR Code';
+                img.style.width = '150px';
+                img.style.height = '150px';
+                container.appendChild(img);
+                console.log('QR Code image generated successfully');
+            }).catch(err => {
+                console.error('QR Code toDataURL error:', err);
+                // Fallback to canvas method
+                const canvas = document.createElement('canvas');
+                canvas.id = 'qr-code';
+                container.appendChild(canvas);
+                QRCode.toCanvas(canvas, text, {
+                    width: 150,
+                    margin: 2,
+                    color: { dark: '#000000', light: '#ffffff' }
+                }, (error) => {
+                    if (error) {
+                        console.error('QR Code canvas error:', error);
+                    } else {
+                        console.log('QR Code canvas generated successfully');
+                    }
+                });
             });
         } else {
-            console.error('QR Code generation failed: canvas or library not available');
+            console.error('QR Code generation failed: container or library not available');
         }
     }
 
