@@ -569,48 +569,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     function generateQRCode(text) {
         const container = document.querySelector('.qr-container');
         console.log('Generating QR code for:', text);
-        console.log('Container element:', container);
-        console.log('QRCode library:', typeof QRCode);
 
-        if (container && typeof QRCode !== 'undefined') {
+        if (container) {
             // Clear previous content
             container.innerHTML = '';
 
-            // Try toDataURL method first (creates an image)
-            QRCode.toDataURL(text, {
-                width: 150,
-                margin: 2,
-                color: { dark: '#000000', light: '#ffffff' }
-            }).then(url => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = 'QR Code';
-                img.style.width = '150px';
-                img.style.height = '150px';
-                container.appendChild(img);
-                console.log('QR Code image generated successfully');
-            }).catch(err => {
-                console.error('QR Code toDataURL error:', err);
-                // Fallback to canvas method
-                const canvas = document.createElement('canvas');
-                canvas.id = 'qr-code';
-                container.appendChild(canvas);
-                QRCode.toCanvas(canvas, text, {
-                    width: 150,
-                    margin: 2,
-                    color: { dark: '#000000', light: '#ffffff' }
-                }, (error) => {
-                    if (error) {
-                        console.error('QR Code canvas error:', error);
-                    } else {
-                        console.log('QR Code canvas generated successfully');
-                    }
-                });
-            });
+            // Use QR Code API service (no library needed)
+            const img = document.createElement('img');
+            const encodedText = encodeURIComponent(text);
+            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedText}`;
+            img.alt = 'QR Code';
+            img.style.width = '150px';
+            img.style.height = '150px';
+            img.style.display = 'block';
+
+            img.onload = () => {
+                console.log('QR Code loaded successfully');
+            };
+
+            img.onerror = () => {
+                console.error('QR Code failed to load from API');
+                container.innerHTML = '<p style="color: red; font-size: 12px;">QR Code unavailable</p>';
+            };
+
+            container.appendChild(img);
         } else {
-            console.error('QR Code generation failed: container or library not available');
+            console.error('QR Code container not found');
         }
     }
+
+
 
 
     function updatePrivacyBadges(zkp, decoy, disposable) {
